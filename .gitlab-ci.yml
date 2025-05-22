@@ -1,0 +1,49 @@
+image:
+  name: hashicorp/terraform:latest
+  entrypoint: [""]
+
+before_script:
+  - terraform version
+  - terraform init
+
+stages:
+  - validate
+  - plan
+  - apply
+  - destroy
+
+cache:
+  paths:
+    - .terraform/
+
+validate:
+  stage: validate
+  script:
+    - terraform validate
+
+plan:
+  stage: plan
+  script:
+    - terraform plan -out="planfile"
+  artifacts:
+    paths:
+      - planfile
+  dependencies:
+    - validate
+
+apply:
+  stage: apply
+  script:
+    - terraform apply -input=false "planfile"
+  dependencies:
+    - plan
+  when: manual
+
+destroy:
+  stage:  destroy
+  script:
+    - terraform destroy -auto-approve
+  dependencies:
+    - apply
+  when:  manual
+  timeout: 2h
