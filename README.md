@@ -96,7 +96,7 @@ custom-built vpc with:
 
    3. public route tables
 
-   4. security group (ports 22, 80, 443, 8000 open)
+   4. security group (ports 22, 80, 443, open)
 
 
 CI/CD Pipeline (GitLab)
